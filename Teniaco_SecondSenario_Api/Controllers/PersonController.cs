@@ -6,7 +6,7 @@ using Teniaco_SecondSenario_Api.Repositories.Interfaces;
 
 namespace Teniaco_SecondSenario_Api.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class PersonController : ControllerBase
     {

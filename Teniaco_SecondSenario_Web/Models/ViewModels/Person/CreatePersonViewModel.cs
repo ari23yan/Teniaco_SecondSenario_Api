@@ -1,6 +1,6 @@
-﻿namespace Teniaco_SecondSenario_Api.Models.Dtos.Person
+﻿namespace Teniaco_SecondSenario_Web.Models.ViewModels.Person
 {
-    public class CreatePersonDto
+    public class CreatePersonViewModel
     {
         public string Name { get; set; }
         public string LastName { get; set; }

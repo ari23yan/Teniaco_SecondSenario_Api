@@ -34,7 +34,7 @@ namespace Teniaco_SecondSenario_Api.Repositories.Implementations
             }
             Person person = new Person
             {
-                BirthDay = dto.BirthDay,
+                BirthDay = Convert.ToDateTime(dto.BirthDay),
                 CreatedTime = DateTime.Now,
                 LastName = dto.LastName,
                 Mobile = dto.Mobile,
@@ -73,7 +73,7 @@ namespace Teniaco_SecondSenario_Api.Repositories.Implementations
             var persons = await _context.Persons.Where(x => x.IsDeleted == false).ToListAsync();
             var result = _mapper.Map<List<Person>, List<PersonDto>>(persons);
 
-            return new ApiResponse<List<PersonDto>> { IsSuccessFull = true, Message = "SuccessFull", Data = result, Status = StatusCodes.Status200OK.ToString() };
+            return new ApiResponse<List<PersonDto>> { IsSuccessFull = true, Message = "SuccessFull", Data = result, Status = StatusCodes.Status200OK.ToString(),TotalCount=result.Count() };
         }
 
         public async Task<ApiResponse<bool>> UpdatePerson(long id,UpdatePersonDto dto)
