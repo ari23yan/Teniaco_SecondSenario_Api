@@ -28,26 +28,15 @@ namespace Teniaco_SecondSenario_Web.WebServices.Person.Implementations
         public async Task<long> CreatePerson(CreatePersonViewModel dto)
         {
             var client = new RestClient(_apiUrl);
-
             var request = new RestRequest("Person/CreatePerson", Method.Post);
-
-            // Set form content type  
-            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-
-            // Add DTO properties as form parameters
-            request.AddParameter("FirstName", dto.Name);
+            request.AddHeader("Content-Type", "multipart/form-data");
+            request.AddParameter("Name", dto.Name);
             request.AddParameter("LastName", dto.LastName);
-            request.AddParameter("Email", dto.Mobile);
-            request.AddParameter("Email", dto.BirthDay);
-
+            request.AddParameter("Mobile", dto.Mobile);
+            request.AddParameter("BirthDay", dto.BirthDay);
+            var jsonBody = JsonSerializer.Serialize(dto);
+            request.AddJsonBody(jsonBody);
             var response = await client.ExecuteAsync(request);
-
-
-            //var client = new RestClient(_apiUrl);
-            //var request = new RestRequest("Person/CreatePerson", Method.Post);
-            //request.AddHeader("Content-Type", "multipart/form-data");
-            //request.AddBody(dto);
-            //var response = await client.ExecuteAsync(request);
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -56,10 +45,19 @@ namespace Teniaco_SecondSenario_Web.WebServices.Person.Implementations
             var Result = JsonSerializer.Deserialize<ApiResponse<long>>(response.Content, options);
             return Result.Data;
         }
-
-        public Task<bool> DeletePerson(long id)
+        public async Task<bool> DeletePerson(long id)
         {
-            throw new NotImplementedException();
+            var client = new RestClient(_apiUrl);
+            var request = new RestRequest("Person/DeletePerson/{id}", Method.Delete);
+            request.AddUrlSegment("id", id); // Replace 1 with your desired id
+            var response = await client.ExecuteAsync(request);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            var Result = JsonSerializer.Deserialize<ApiResponse<bool>>(response.Content, options);
+            return Result.Data;
         }
 
         public async Task<PersonViewModel> GetPerson(long id)
@@ -91,9 +89,23 @@ namespace Teniaco_SecondSenario_Web.WebServices.Person.Implementations
             return Result.Data;
         }
 
-        public Task<bool> UpdatePerson(long id, UpdatePersonViewModel dto)
+        public async Task<bool> UpdatePerson(long id, UpdatePersonViewModel dto)
         {
-            throw new NotImplementedException();
+            var client = new RestClient(_apiUrl);
+            var request = new RestRequest("Person/EditPerson/{id}", Method.Put);
+            request.AddUrlSegment("id", id); // Replace 1 with your desired id
+            request.AddParameter("Name", dto.Name);
+            request.AddParameter("LastName", dto.LastName);
+            request.AddParameter("Mobile", dto.Mobile);
+            request.AddParameter("BirthDay", dto.BirthDay);
+            var response = await client.ExecuteAsync(request);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            var Result = JsonSerializer.Deserialize<ApiResponse<bool>>(response.Content, options);
+            return Result.Data;
         }
     }
 }

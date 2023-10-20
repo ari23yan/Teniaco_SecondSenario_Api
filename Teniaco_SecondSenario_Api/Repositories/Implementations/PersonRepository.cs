@@ -83,7 +83,7 @@ namespace Teniaco_SecondSenario_Api.Repositories.Implementations
             {
                 return new ApiResponse<bool> { IsSuccessFull = false, Message = "User Not Found", Status = StatusCodes.Status404NotFound.ToString() };
             }
-            person.BirthDay = dto.BirthDay;
+            person.BirthDay = Convert.ToDateTime(dto.BirthDay);
             person.Name = dto.Name;
             person.LastName = dto.LastName;
             person.LastName=dto.LastName;
